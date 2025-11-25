@@ -9,6 +9,6 @@ import com.TeacherApp.TeacherApp.Models.Student;
 @Repository
 public interface StudentRepo extends MongoRepository<Student, ObjectId>{
     
-    public Student findByUsername(String username);
+    public Student findByEmail(String email);
 
 }
