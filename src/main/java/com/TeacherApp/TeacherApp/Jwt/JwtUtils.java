@@ -14,9 +14,7 @@ import com.TeacherApp.TeacherApp.Models.Teacher;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecureDigestAlgorithm;
 
 @Component
 public class JwtUtils {
@@ -42,7 +40,7 @@ public class JwtUtils {
                 .issuedAt(new Date())
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 30))
                 .claims(claims)
-                .signWith(key,SignatureAlgorithm.HS256)
+                .signWith(key)
                 .compact();
     }
 

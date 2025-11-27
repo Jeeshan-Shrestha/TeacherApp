@@ -7,5 +7,5 @@ public enum Faculty {
     ELECTRICAL,
     AGRICULTURAL,
     ELECTRONICS,
-    ARCHITECTURE
+    ARCHITECTURE    
 }
