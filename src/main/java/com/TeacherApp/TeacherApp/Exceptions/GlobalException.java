@@ -31,8 +31,13 @@ public class GlobalException {
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
 
-     @ExceptionHandler(JwtInternalError.class)
+    @ExceptionHandler(JwtInternalError.class)
     public ResponseEntity<BackendResponse> JwtInternalErrorHandler(RuntimeException e){
+        return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
+    }
+
+    @ExceptionHandler(SubjectAlreadyExistsException.class)
+    public ResponseEntity<BackendResponse> subjectAlreadyExistsExceptionHandler(RuntimeException e){
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
 }
