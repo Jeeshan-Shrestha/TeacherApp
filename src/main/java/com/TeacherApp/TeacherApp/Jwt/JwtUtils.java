@@ -24,13 +24,11 @@ public class JwtUtils {
 
     public String generateToken(UserDetails userDetails){
         Map<String,Object> claims = new HashMap<>();
-        if (userDetails instanceof Student){
-            Student s = (Student)userDetails;
+        if (userDetails instanceof Student s){
             claims.put("email", s.getEmail());
             claims.put("name",s.getName());
         }
-        if (userDetails instanceof Teacher){
-            Teacher t = (Teacher)userDetails;
+        if (userDetails instanceof Teacher t){
             claims.put("email", t.getEmail());
             claims.put("name",t.getName());
         }
