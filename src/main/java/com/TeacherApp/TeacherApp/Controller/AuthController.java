@@ -40,6 +40,12 @@ public class AuthController {
         String message = authService.login(login,response);
         return ResponseEntity.ok().body(new BackendResponse(true,message));
     }
+
+    @PostMapping("/teacher/login")
+    public ResponseEntity<BackendResponse> loginTeacher(@RequestBody LoginDTO login, HttpServletResponse response) {
+        String message = authService.login(login,response);
+        return ResponseEntity.ok().body(new BackendResponse(true,message));
+    }
     
     
 

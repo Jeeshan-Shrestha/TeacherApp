@@ -48,7 +48,7 @@ public class AuthService {
             throw new StudentAlreadyExistsException("This student already exists");
         }
         student.setPassword(encoder.encode(student.getPassword()));
-        student.setRole("STUDENT");
+        student.setRole("ROLE_STUDENT");
         studentRepo.save(student);
         return "Succesfully registered";
     }
@@ -58,7 +58,7 @@ public class AuthService {
             throw new TeacherAlreadyExistsException("This teacher already exists");
         }
         teacher.setPassword(encoder.encode(teacher.getPassword()));
-        teacher.setRole("TEACHER");
+        teacher.setRole("ROLE_TEACHER");
         teacherRepo.save(teacher);
         return "successfully registered";
     }
@@ -72,7 +72,7 @@ public class AuthService {
                                                     .httpOnly(true)
                                                     .secure(true)
                                                     .path("/")
-                                                    .maxAge(Duration.ofDays(365))
+                                                    .maxAge(Duration.ofDays(30))
                                                     .sameSite("None")
                                                     .build();
             response.addHeader("Set-Cookie", cookie.toString());

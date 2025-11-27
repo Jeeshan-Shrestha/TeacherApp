@@ -30,4 +30,9 @@ public class GlobalException {
     public ResponseEntity<BackendResponse> teacherAlreadyExistsExceptionHandler(RuntimeException e){
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
+
+     @ExceptionHandler(JwtInternalError.class)
+    public ResponseEntity<BackendResponse> JwtInternalErrorHandler(RuntimeException e){
+        return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
+    }
 }

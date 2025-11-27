@@ -14,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.TeacherApp.TeacherApp.Exceptions.CustomAccessDeniedHandler;
 import com.TeacherApp.TeacherApp.Jwt.JwtAuthFilter;
 import com.TeacherApp.TeacherApp.Services.MyUserDetailsService;
 
@@ -21,20 +22,29 @@ import com.TeacherApp.TeacherApp.Services.MyUserDetailsService;
 @Configuration
 public class SecurityConfig {
 
+
     @Autowired
     private JwtAuthFilter jwtFilter;
 
     @Autowired
     private MyUserDetailsService myUserDetailsService;
 
+    @Autowired
+    private CustomAccessDeniedHandler accessDeniedHandler;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http){
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(
-            "/api/v1/auth/**"
-        ).permitAll().anyRequest().authenticated());
+        http.authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/auth/**").permitAll()
+        .requestMatchers("/api/v1/details/students").hasAnyRole("ADMIN","TEACHER")
+        .requestMatchers("/api/v1/details/teacher").hasAnyRole("ADMIN","TEACHER")
+        .requestMatchers("/api/v1/details/faculty").hasAnyRole("ADMIN","TEACHER")
+        .requestMatchers("/api/v1/details/section").hasAnyRole("ADMIN","TEACHER")
+        .anyRequest().authenticated());
+        
         http.csrf(c -> c.disable());
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.exceptionHandling(ex -> ex.accessDeniedHandler(accessDeniedHandler));
         return http.build();
     }
 

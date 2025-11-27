@@ -27,16 +27,18 @@ public class JwtUtils {
         if (userDetails instanceof Student s){
             claims.put("email", s.getEmail());
             claims.put("name",s.getName());
+            claims.put("role",s.getRole());
         }
         if (userDetails instanceof Teacher t){
             claims.put("email", t.getEmail());
             claims.put("name",t.getName());
+            claims.put("role",t.getRole());
         }
 
         return Jwts.builder()
                 .subject(userDetails.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 30))
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 30))
                 .claims(claims)
                 .signWith(key)
                 .compact();
@@ -51,11 +53,15 @@ public class JwtUtils {
     }
 
     public String extractUsername(String token) {
-        return (String)extractAllClaims(token).get("name");
+        return (String)extractAllClaims(token).getSubject();
     }
 
     public String extractEmail(String token){
         return (String)extractAllClaims(token).get("email");
+    }
+
+    public String extractRole(String token){
+        return (String)extractAllClaims(token).get("role");
     }
 
     public boolean validateToken(String username, UserDetails userDetails, String token){
