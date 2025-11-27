@@ -40,4 +40,9 @@ public class GlobalException {
     public ResponseEntity<BackendResponse> subjectAlreadyExistsExceptionHandler(RuntimeException e){
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<BackendResponse> runtimeExceptionHandler(RuntimeException e){
+        return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
+    }
 }

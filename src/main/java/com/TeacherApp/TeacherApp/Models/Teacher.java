@@ -1,5 +1,6 @@
 package com.TeacherApp.TeacherApp.Models;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -34,6 +35,8 @@ public class Teacher implements UserDetails{
     private String phone;
 
     private String role;
+
+    private List<ObjectId> teacherSubjectId = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

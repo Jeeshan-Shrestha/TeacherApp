@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 
 import com.TeacherApp.TeacherApp.Models.Student;
 import com.TeacherApp.TeacherApp.Models.StudentDTO;
+import com.TeacherApp.TeacherApp.Models.Subject;
+import com.TeacherApp.TeacherApp.Models.SubjectDTO;
 import com.TeacherApp.TeacherApp.Models.Teacher;
 import com.TeacherApp.TeacherApp.Models.TeacherDTO;
 
@@ -26,6 +28,13 @@ public class ConversionOfDTOService {
         dto.setEmail(teacher.getEmail());
         dto.setId(teacher.getId());
         dto.setName(teacher.getName());
+        return dto;
+    }
+
+    public SubjectDTO subjectToSubjectDTO(Subject subject){
+        SubjectDTO dto = new SubjectDTO();
+        dto.setName(subject.getName());
+        dto.setSubjectCode(subject.getSubjectCode());
         return dto;
     }
 
