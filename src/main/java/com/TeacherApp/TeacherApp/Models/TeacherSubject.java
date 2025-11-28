@@ -24,4 +24,8 @@ public class TeacherSubject {
 
     private Section section; 
 
+    private String subjectCode;
+
+    private String subjectName;
+
 }

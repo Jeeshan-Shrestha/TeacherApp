@@ -8,6 +8,8 @@ import com.TeacherApp.TeacherApp.Models.Subject;
 import com.TeacherApp.TeacherApp.Models.SubjectDTO;
 import com.TeacherApp.TeacherApp.Models.Teacher;
 import com.TeacherApp.TeacherApp.Models.TeacherDTO;
+import com.TeacherApp.TeacherApp.Models.TeacherSubject;
+import com.TeacherApp.TeacherApp.Models.TeacherSubjectDTO;
 
 @Service
 public class ConversionOfDTOService {
@@ -34,6 +36,23 @@ public class ConversionOfDTOService {
     public SubjectDTO subjectToSubjectDTO(Subject subject){
         SubjectDTO dto = new SubjectDTO();
         dto.setName(subject.getName());
+        dto.setSubjectCode(subject.getSubjectCode());
+        return dto;
+    }
+
+    public SubjectDTO teacherSubjectToSubjectDTO(TeacherSubject subject){
+        SubjectDTO dto = new SubjectDTO();
+        dto.setName(subject.getSubjectName());
+        dto.setSubjectCode(subject.getSubjectCode());
+        return dto;
+    }
+
+    public TeacherSubjectDTO teacherSubjectToTeacherSubjectDTO(TeacherSubject subject){
+        TeacherSubjectDTO dto = new TeacherSubjectDTO();
+        dto.setFaculty(subject.getFaculty());
+        dto.setSection(subject.getSection());
+        dto.setSemester(subject.getSemester());
+        dto.setSubjectName(subject.getSubjectName());
         dto.setSubjectCode(subject.getSubjectCode());
         return dto;
     }

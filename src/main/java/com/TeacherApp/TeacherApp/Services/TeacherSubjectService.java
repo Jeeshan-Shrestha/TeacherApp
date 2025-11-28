@@ -1,5 +1,6 @@
 package com.TeacherApp.TeacherApp.Services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bson.types.ObjectId;
@@ -7,8 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.TeacherApp.TeacherApp.Exceptions.SubjectAlreadyExistsException;
+import com.TeacherApp.TeacherApp.Models.Subject;
 import com.TeacherApp.TeacherApp.Models.Teacher;
 import com.TeacherApp.TeacherApp.Models.TeacherSubject;
+import com.TeacherApp.TeacherApp.Models.TeacherSubjectDTO;
+import com.TeacherApp.TeacherApp.Repositories.SubjectRepo;
 import com.TeacherApp.TeacherApp.Repositories.TeacherRepo;
 import com.TeacherApp.TeacherApp.Repositories.TeacherSubjectRepo;
 
@@ -21,20 +26,48 @@ public class TeacherSubjectService {
     @Autowired
     private TeacherRepo teacherRepo;
 
+    @Autowired
+    private SubjectRepo subjectRepo;
+
+    @Autowired
+    private ConversionOfDTOService converter;
+
     public String addTeacherSubject(TeacherSubject teacherSubject){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (!(principal instanceof Teacher t)){
            throw new RuntimeException("You need to be either teacher or admin");
         }
-        Teacher teacher = teacherRepo.findById(t.getId()).orElseThrow(()-> new RuntimeException("Teacher not found"));
-
+        if (teacherSubjectRepo.existsByFacultyAndSectionAndSubjectCode(teacherSubject.getFaculty(), teacherSubject.getSection(), teacherSubject.getSubjectCode())){
+            throw new SubjectAlreadyExistsException("This subject already exists in the teacher database");
+        }
+        Subject subject = subjectRepo.findBySubjectCodeAndFaculty(teacherSubject.getSubjectCode(), teacherSubject.getFaculty());
+        if (subject == null){
+            throw new RuntimeException("This subject doesnt exists for the given criteria");
+        }
+        teacherSubject.setSubjectName(subject.getName());
         TeacherSubject teacherSubjectWithId = teacherSubjectRepo.save(teacherSubject);
-
+        Teacher teacher = teacherRepo.findById(t.getId()).orElseThrow(()-> new RuntimeException("Teacher not found"));
         List<ObjectId> teacherSubjectIds = teacher.getTeacherSubjectId();
         teacherSubjectIds.add(teacherSubjectWithId.getId());
         teacher.setTeacherSubjectId(teacherSubjectIds);
         teacherRepo.save(teacher);
 
         return "Successfully saved";
+    }
+
+    public List<TeacherSubjectDTO> getCurrentTeacherSubject(){
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof Teacher t)){
+            throw new RuntimeException("You need to be teacher or admin");
+        }
+        List<ObjectId> subjectIds = t.getTeacherSubjectId();
+        List<TeacherSubject> teacherSubjects = teacherSubjectRepo.findByIdIn(subjectIds);
+        List<TeacherSubjectDTO> subjectDTOs = new ArrayList<>();
+        for (TeacherSubject teacherSubject : teacherSubjects){
+            TeacherSubjectDTO dto = converter.teacherSubjectToTeacherSubjectDTO(teacherSubject);
+            subjectDTOs.add(dto);
+        }
+        return subjectDTOs;    
     }
 }
