@@ -38,6 +38,8 @@ public class Teacher implements UserDetails{
 
     private List<ObjectId> teacherSubjectId = new ArrayList<>();
 
+    private List<ObjectId> notesId = new ArrayList<>();
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(this.role));

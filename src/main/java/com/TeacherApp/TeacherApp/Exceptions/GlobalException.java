@@ -1,5 +1,7 @@
 package com.TeacherApp.TeacherApp.Exceptions;
 
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -48,6 +50,11 @@ public class GlobalException {
 
     @ExceptionHandler(MongoDBDeletionException.class)
     public ResponseEntity<BackendResponse> mongoDBDeletionExceptionHandler(RuntimeException e){
+        return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<BackendResponse> IOExceptionHandler(RuntimeException e){
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
 }
