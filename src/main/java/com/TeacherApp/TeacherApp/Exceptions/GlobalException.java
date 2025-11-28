@@ -45,4 +45,9 @@ public class GlobalException {
     public ResponseEntity<BackendResponse> runtimeExceptionHandler(RuntimeException e){
         return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
     }
+
+    @ExceptionHandler(MongoDBDeletionException.class)
+    public ResponseEntity<BackendResponse> mongoDBDeletionExceptionHandler(RuntimeException e){
+        return ResponseEntity.badRequest().body(new BackendResponse(false,e.getMessage()));
+    }
 }

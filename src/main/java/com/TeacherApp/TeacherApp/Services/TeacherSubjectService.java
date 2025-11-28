@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.TeacherApp.TeacherApp.Exceptions.MongoDBDeletionException;
 import com.TeacherApp.TeacherApp.Exceptions.SubjectAlreadyExistsException;
 import com.TeacherApp.TeacherApp.Models.Subject;
 import com.TeacherApp.TeacherApp.Models.Teacher;
@@ -70,4 +71,24 @@ public class TeacherSubjectService {
         }
         return subjectDTOs;    
     }
+
+    public String deleteTeacherSubject(TeacherSubjectDTO subject){
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (!(principal instanceof Teacher t)){
+            throw new RuntimeException("You need teacher role to perform this action");
+        }
+
+        if (teacherSubjectRepo.existsByFacultyAndSectionAndSubjectCode(subject.getFaculty(), subject.getSection(), subject.getSubjectCode())){
+           
+            TeacherSubject subjectOnDB = teacherSubjectRepo.findByFacultyAndSectionAndSubjectCode(subject.getFaculty(), subject.getSection(), subject.getSubjectCode());
+            ObjectId id = subjectOnDB.getId();
+            t.getTeacherSubjectId().remove(id);
+            teacherRepo.save(t);
+            teacherSubjectRepo.deleteByFacultyAndSectionAndSubjectCodeAndSemester(subject.getFaculty(), subject.getSection(), subject.getSubjectCode(), subject.getSemester());
+            return "Successfully deleted";
+        }
+        throw new MongoDBDeletionException("No such subject exists in the teacher's collection");
+    }
+
 }

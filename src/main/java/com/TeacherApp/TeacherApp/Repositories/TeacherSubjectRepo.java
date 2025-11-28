@@ -17,4 +17,7 @@ public interface TeacherSubjectRepo extends MongoRepository<TeacherSubject, Obje
 
     public boolean existsByFacultyAndSectionAndSubjectCode(Faculty faculty,Section section,String subjectCode);
 
+    public void deleteByFacultyAndSectionAndSubjectCodeAndSemester(Faculty faculty,Section section,String subjectCode,int semester);
+
+    public TeacherSubject findByFacultyAndSectionAndSubjectCode(Faculty faculty,Section section,String subjectCode);
 }

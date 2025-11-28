@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,6 +36,11 @@ public class TeacherSubjectController {
         List<TeacherSubjectDTO> message = teacherSubjectService.getCurrentTeacherSubject();
         return ResponseEntity.ok().body(new BackendResponse(true,message));
     }
-    
 
+    @DeleteMapping("/delete")
+    public ResponseEntity<BackendResponse> deleteTeacherSubject(@RequestBody TeacherSubjectDTO dto) {
+        String message = teacherSubjectService.deleteTeacherSubject(dto);
+        return ResponseEntity.ok().body(new BackendResponse(true,message));
+    }
+    
 }
