@@ -36,7 +36,7 @@ public class Student implements UserDetails{
 
     private int semester;
 
-    private String section;
+    private Section section;
 
     private Faculty faculty;
 

@@ -2,6 +2,10 @@ package com.TeacherApp.TeacherApp.Services;
 
 import org.springframework.stereotype.Service;
 
+import com.TeacherApp.TeacherApp.Models.Notes;
+import com.TeacherApp.TeacherApp.Models.NotesDTO;
+import com.TeacherApp.TeacherApp.Models.Notice;
+import com.TeacherApp.TeacherApp.Models.NoticeDTO;
 import com.TeacherApp.TeacherApp.Models.Student;
 import com.TeacherApp.TeacherApp.Models.StudentDTO;
 import com.TeacherApp.TeacherApp.Models.Subject;
@@ -54,6 +58,20 @@ public class ConversionOfDTOService {
         dto.setSemester(subject.getSemester());
         dto.setSubjectName(subject.getSubjectName());
         dto.setSubjectCode(subject.getSubjectCode());
+        return dto;
+    }
+
+    public NotesDTO notesToNotesDTO(Notes note){
+        NotesDTO dto = new NotesDTO();
+        dto.setTitle(note.getTitle());
+        dto.setFileContent(note.getFileContent());
+        return dto;
+    }
+
+    public NoticeDTO noticeToNoticeDTO(Notice notice){
+        NoticeDTO dto = new NoticeDTO();
+        dto.setTitle(notice.getTitle());
+        dto.setDescription(notice.getDescription());
         return dto;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.TeacherApp.TeacherApp.Exceptions.JwtInternalError;
 import com.TeacherApp.TeacherApp.Models.Faculty;
+import com.TeacherApp.TeacherApp.Models.Section;
 import com.TeacherApp.TeacherApp.Models.Student;
 import com.TeacherApp.TeacherApp.Models.StudentDTO;
 import com.TeacherApp.TeacherApp.Models.Teacher;
@@ -39,7 +40,7 @@ public class UserDetailService {
     public List<StudentDTO> getAllStudentBySection(Student student){
         Faculty faculty = student.getFaculty();
         int semester = student.getSemester();
-        String section = student.getSection();
+        Section section = student.getSection();
         List<Student> students = studentRepo.findByFacultyAndSemesterAndSection(faculty, semester, section);
         return students.stream().map(converter::studentToStudentDTO).toList();
     }

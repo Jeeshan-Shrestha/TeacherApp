@@ -21,6 +21,6 @@ public class StudentDTO{
 
     private ObjectId id;
 
-    private String section;
+    private Section section;
 
 }

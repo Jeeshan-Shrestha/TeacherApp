@@ -1,5 +1,7 @@
 package com.TeacherApp.TeacherApp.Services;
 
+import java.util.List;
+
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +46,22 @@ public class NotesService {
         }
 
         throw new RuntimeException("Couldn't add the note");
+    }
+
+    public List<Notes> getMyNotes(){
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof Student s){
+            List<ObjectId> notesId = s.getNotesId();
+            List<Notes> notes = notesRepo.findAllById(notesId);
+            return notes;
+        }
+
+        if (principal instanceof Teacher t){
+            List<ObjectId> notesId = t.getNotesId();
+            List<Notes> notes = notesRepo.findAllById(notesId);
+            return notes;
+        }
+        throw new RuntimeException("Couldnt find the notes");
     }
 
 }
