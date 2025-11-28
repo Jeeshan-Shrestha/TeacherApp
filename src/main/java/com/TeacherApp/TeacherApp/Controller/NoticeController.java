@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.TeacherApp.TeacherApp.Models.BackendResponse;
 import com.TeacherApp.TeacherApp.Models.Notice;
+import com.TeacherApp.TeacherApp.Models.NoticeDTO;
 import com.TeacherApp.TeacherApp.Services.NoticeService;
 
 
@@ -31,7 +32,7 @@ public class NoticeController {
 
     @GetMapping("/my-notice")
     public ResponseEntity<BackendResponse> getNotice() {
-        List<Notice> message = noticeService.getNotice();
+        List<NoticeDTO> message = noticeService.getNotice();
         return ResponseEntity.ok().body(new BackendResponse(true,message));
     }
     

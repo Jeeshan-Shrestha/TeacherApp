@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.TeacherApp.TeacherApp.Models.Notes;
+import com.TeacherApp.TeacherApp.Models.NotesDTO;
 import com.TeacherApp.TeacherApp.Models.Student;
 import com.TeacherApp.TeacherApp.Models.Teacher;
 import com.TeacherApp.TeacherApp.Repositories.NotesRepo;
@@ -25,6 +26,9 @@ public class NotesService {
 
     @Autowired
     private TeacherRepo teacherRepo;
+
+    @Autowired
+    private ConversionOfDTOService converter;
 
     public String addNote(Notes note){
 
@@ -48,18 +52,17 @@ public class NotesService {
         throw new RuntimeException("Couldn't add the note");
     }
 
-    public List<Notes> getMyNotes(){
+    public List<NotesDTO> getMyNotes(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof Student s){
-            List<ObjectId> notesId = s.getNotesId();
-            List<Notes> notes = notesRepo.findAllById(notesId);
-            return notes;
+            List<Notes> notes = notesRepo.findByFacultyAndSemesterAndSection(s.getFaculty(), s.getSemester(), s.getSection());
+            return notes.stream().map(converter::notesToNotesDTO).toList();
         }
 
         if (principal instanceof Teacher t){
             List<ObjectId> notesId = t.getNotesId();
             List<Notes> notes = notesRepo.findAllById(notesId);
-            return notes;
+            return notes.stream().map(converter::notesToNotesDTO).toList();
         }
         throw new RuntimeException("Couldnt find the notes");
     }
